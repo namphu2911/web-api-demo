@@ -9,6 +9,6 @@
         public Guid WalkDifficultyId { get; set; }
 
         public Region Region { get; set; }
-        public IEnumerable<WalkDifficulty> WalkDifficulty { get; set; }
+        public WalkDifficulty WalkDifficulty { get; set; }
     }
 }
