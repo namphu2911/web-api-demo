@@ -22,7 +22,7 @@ namespace DemoNP.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllRegionsAsync()
+        public async Task<IActionResult> GetAllWalksAsync()
         {
             var walks = await walkRepository.GetAllAsync();
 
@@ -32,7 +32,7 @@ namespace DemoNP.API.Controllers
 
         [HttpGet]
         [Route("{id:guid}")]
-        [ActionName("GetWalksAsync")]
+        [ActionName("GetWalkDifficultiesAsync")]
         public async Task<IActionResult> GetWalksAsync(Guid id)
         {
             var walk = await walkRepository.GetAsync(id);
