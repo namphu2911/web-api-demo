@@ -2,6 +2,7 @@
 using DemoNP.API.Models.Domain;
 using DemoNP.API.Models.DTO;
 using DemoNP.API.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DemoNP.API.Controllers
@@ -20,6 +21,7 @@ namespace DemoNP.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "reader")]
         public async Task<IActionResult> GetAllRegionsAsync()
         {
             var regions = await regionRepository.GetAllAsync();
@@ -31,6 +33,7 @@ namespace DemoNP.API.Controllers
         [HttpGet]
         [Route("{id:guid}")]
         [ActionName("GetRegionsAsync")]
+        [Authorize(Roles = "reader")]
         public async Task<IActionResult> GetRegionsAsync(Guid id)
         {
             var region = await regionRepository.GetAsync(id);
@@ -43,13 +46,14 @@ namespace DemoNP.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "writer")]
         public async Task<IActionResult> AddRegionsAsync(AddRegionRequest addRegionRequest)
         {
             //Validate The Request
-            if (!ValidateAddRegionAsync(addRegionRequest))
-            {
-                return BadRequest(ModelState);
-            }
+            //if (!ValidateAddRegionAsync(addRegionRequest))
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
             //Request to Domain
             var region = new Region()
@@ -71,6 +75,7 @@ namespace DemoNP.API.Controllers
 
         [HttpDelete]
         [Route("{id:guid}")]
+        [Authorize(Roles = "writer")]
         public async Task<IActionResult> DeleteRegionsAsync(Guid id)
         {
             //Get region from db
@@ -85,13 +90,14 @@ namespace DemoNP.API.Controllers
 
         [HttpPut]
         [Route("{id:guid}")]
+        [Authorize(Roles = "writer")]
         public async Task<IActionResult> UpdateRegionsAsync([FromRoute] Guid id, [FromBody] UpdateRegionRequest updateRegionRequest)
         {
             //Validate the incoming request
-            if (!ValidateUpdateRegionAsync(updateRegionRequest))
-            {
-                return BadRequest(ModelState);
-            }
+            //if (!ValidateUpdateRegionAsync(updateRegionRequest))
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
             //convert update to domain
             var region = new Region()

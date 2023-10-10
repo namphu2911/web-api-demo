@@ -2,6 +2,7 @@
 using DemoNP.API.Models.Domain;
 using DemoNP.API.Models.DTO;
 using DemoNP.API.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DemoNP.API.Controllers
@@ -19,6 +20,7 @@ namespace DemoNP.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "reader")]
         public async Task<IActionResult> GetAllWalkDifficultiesAsync()
         {
             var walkDifficulties = await walkDifficultyRepository.GetAllAsync();
@@ -30,6 +32,7 @@ namespace DemoNP.API.Controllers
         [HttpGet]
         [Route("{id:guid}")]
         [ActionName("GetWalkDifficultiesAsync")]
+        [Authorize(Roles = "reader")]
         public async Task<IActionResult> GetWalkDifficultiesAsync(Guid id)
         {
             var walkDifficulty = await walkDifficultyRepository.GetAsync(id);
@@ -42,13 +45,14 @@ namespace DemoNP.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "writer")]
         public async Task<IActionResult> AddWalkDifficultiesAsync(AddWalkDifficultyRequest addWalkDifficultyRequest)
         {
             // validate incoming request
-            if (!ValidateAddWalkDifficultyAsync(addWalkDifficultyRequest))
-            {
-                return BadRequest(ModelState);
-            }
+            //if (!ValidateAddWalkDifficultyAsync(addWalkDifficultyRequest))
+            //{
+            //    return BadRequest(ModelState);
+            //}
             //Request to Domain
             var walkDifficulty = new WalkDifficulty()
             {
@@ -64,13 +68,14 @@ namespace DemoNP.API.Controllers
 
         [HttpPut]
         [Route("{id:guid}")]
+        [Authorize(Roles = "writer")]
         public async Task<IActionResult> UpdateWalkDifficultiesAsync([FromRoute] Guid id, [FromBody] UpdateWalkDifficultyRequest updateWalkDifficultyRequest)
         {
             // Validate the incoming request
-            if (!ValidateUpdateWalkDifficultyAsync(updateWalkDifficultyRequest))
-            {
-                return BadRequest(ModelState);
-            }
+            //if (!ValidateUpdateWalkDifficultyAsync(updateWalkDifficultyRequest))
+            //{
+            //    return BadRequest(ModelState);
+            //}
             //convert update to domain
             var walkDifficulty = new WalkDifficulty()
             {
@@ -87,6 +92,7 @@ namespace DemoNP.API.Controllers
 
         [HttpDelete]
         [Route("{id:guid}")]
+        [Authorize(Roles = "writer")]
         public async Task<IActionResult> DeleteWalkDifficultiesAsync(Guid id)
         {
             //Get region from db
@@ -122,7 +128,6 @@ namespace DemoNP.API.Controllers
 
             return true;
         }
-
 
         private bool ValidateUpdateWalkDifficultyAsync(UpdateWalkDifficultyRequest updateWalkDifficultyRequest)
         {
